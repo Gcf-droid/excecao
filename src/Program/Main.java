@@ -17,35 +17,31 @@ public class Main {
 		System.out.println("Room number: ");
 		int roomNumber = sc.nextInt();
 		System.out.println("Check in date: ");
-		Date checkin = sdf.parse(sc.next());
+		Date checkIn = sdf.parse(sc.next());
 		System.out.println("Check out date: ");
-		Date checkout = sdf.parse(sc.next());
+		Date checkOut = sdf.parse(sc.next());
 
-		if (!checkout.after(checkin)) {
+		if (!checkOut.after(checkIn)) {
 			System.out.println("Error in reservation: invalid dadte");
 		} else {
-			reservation = new Reservation(roomNumber, checkin, checkout);
+			reservation = new Reservation(roomNumber, checkIn, checkOut);
 			System.out.println(reservation);
 		}
 
 		System.out.println("---------UPDATE RESERVATIONS-----------------");
 		System.out.println("Entre com os dados para atualizar as reservas");
 		System.out.println("Check in date: ");
-		Date checkIn = sdf.parse(sc.next());
+		checkIn = sdf.parse(sc.next());
 		System.out.println("Check out date: ");
-		Date checkOut = sdf.parse(sc.next());
+		checkOut = sdf.parse(sc.next());
 
 		System.out.println("------------DADOS ATUALIZADOS-------------");
-		Date now = new Date();
-		if (checkIn.before(now) || checkOut.before(now)) {
-			System.out.println("Preciso de datas futuras");
-		} else if (!checkout.after(checkin)) {
-			System.out.println("Error in reservation: invalid dadte");
+		String error = reservation.updateDates(checkIn, checkOut);
+		if (error != null) {
+			System.out.println("Error in reservation " + error);
 		} else {
-			reservation.updateDates(checkIn, checkOut);
-			System.out.println(reservation);
+			System.out.println("Reservation: " + reservation);
 		}
-
 		sc.close();
 
 	}

@@ -7,18 +7,25 @@ import java.util.concurrent.TimeUnit;
 public class Reservation {
 
 	private Integer roomNumber;
-	private Date checkin;
-	private Date checkout;
+	private Date checkIn;
+	private Date checkOut;
 	public static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	
+
 	public Reservation() {
-		
+
 	}
-	
-	public Reservation(Integer roomNumber, Date checkin, Date checkout) {
+
+	public Reservation(Integer roomNumber, Date checkIn, Date checkOut) {
+		super();
 		this.roomNumber = roomNumber;
-		this.checkin = checkin;
-		this.checkout = checkout;
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+	}
+
+	public long duration() {
+		long diff = checkOut.getTime() - checkIn.getTime();
+		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
 	}
 
 	public Integer getRoomNumber() {
@@ -29,30 +36,32 @@ public class Reservation {
 		this.roomNumber = roomNumber;
 	}
 
-	public Date getCheckin() {
-		return checkin;
+	public Date getCheckIn() {
+		return checkIn;
 	}
 
-	public Date getCheckout() {
-		return checkout;
+	public Date getCheckOut() {
+		return checkOut;
 	}
 
-	public long duration() {
-	long diff= checkout.getTime()-checkin.getTime();
-	 return TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
-		
-	}
-	public void updateDates(Date checkin,Date checkout) {
-		this.checkin=checkin;
-		this.checkout=checkout;
+	public String updateDates(Date checkIn, Date checkOut) {
+
+		Date now = new Date();
+		if (checkIn.before(now) || checkOut.before(now)) {
+			return "Preciso de datas futuras";
+		}
+		if (!checkOut.after(checkIn)) {
+			return "Error in reservation: data de saida anterior a de chegada";
+		}
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+		return null;
 	}
 
 	@Override
 	public String toString() {
-		return "Reservation [roomNumber=" + roomNumber + ", checkin=" + sdf.format(checkin) + ", checkout=" + sdf.format(checkout)
-				+ ", duration()=" + duration() +" Nights"+ "]";
+		return "Reservation [roomNumber=" + roomNumber + ", checkin=" + sdf.format(checkIn) + ", checkout="
+				+ sdf.format(checkOut) + ", duration()=" + duration() + " Nights" + "]";
 	}
 
-	
-	
 }
